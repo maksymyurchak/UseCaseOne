@@ -32,5 +32,5 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: .github/workflows/build-and-analyze.yml # Name of the workflow file to trigger
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
           ref: ${{ github.ref }}
