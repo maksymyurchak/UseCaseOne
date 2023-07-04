@@ -23,9 +23,9 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run:  dotnet build --configuration Release --no-restore UseCaseOne/UseCaseOne.csproj
       - name: Test
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test --no-restore --verbosity normal UseCaseOne/UseCaseOne.csproj
 
       - name: Trigger SonarCloud analysis
         if: ${{ success() }} # This step runs only if the build and test steps were successful
