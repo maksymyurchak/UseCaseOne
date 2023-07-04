@@ -25,6 +25,21 @@ namespace UseCaseOne.Filter
 			}
 			return countries;
 		}
+		public static IEnumerable<CountryInfo> OrderByName(this IEnumerable<CountryInfo> countries, string sortOrder)
+		{
+			if (!string.IsNullOrWhiteSpace(sortOrder))
+			{
+				if (sortOrder.Equals("asc"))
+				{
+					return countries.OrderBy(country => country.Name.Common);
+				}
+				else if (sortOrder.Equals("desc"))
+				{
+					return countries.OrderByDescending(country => country.Name.Common);
+				}
+			}
+			return countries;
+		}
 	}
 
 }
