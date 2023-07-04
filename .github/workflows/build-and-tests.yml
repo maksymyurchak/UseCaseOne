@@ -21,7 +21,7 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore UseCaseOne/UseCaseOne.csproj
       - name: Build
         run:  dotnet build --configuration Release --no-restore UseCaseOne/UseCaseOne.csproj
       - name: Test
@@ -33,4 +33,4 @@ jobs:
         with:
           workflow: build-analyze.yml # Name of the workflow file to trigger
           token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ github.ref }}   
+          ref: ${{ github.ref }}
