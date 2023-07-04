@@ -1,0 +1,31 @@
+ public static IEnumerable<CountryInfo> FilterByPopulation(this IEnumerable<CountryInfo> countries, int? population)
+    {
+        if (population.HasValue)
+        {
+            return countries.Where(country => country.Population >= population.Value);
+        }
+        return countries;
+    }
+but 
+o	Create a function that accepts a number as an attribute and can filter by ` population `. 
+o	The filter should search for countries where the population is less than provided number from attributes in the millions of people (e.g., by providing value `10`, I should find countries with a population less than 10m)
+ChatGPT
+If you want to filter by countries where the population is less than the provided number, and the provided number represents millions of people, you should modify your filter method like this:
+
+csharp
+Copy code
+public static IEnumerable<CountryInfo> FilterByPopulation(this IEnumerable<CountryInfo> countries, int? populationInMillions)
+{
+    if (populationInMillions.HasValue)
+    {
+        // Convert populationInMillions to just population (because populationInMillions is in millions)
+        int population = populationInMillions.Value * 1_000_000; 
+
+        // Filter countries where the population is less than the provided population
+        return countries.Where(country => country.Population < population); 
+    }
+    return countries;
+}
+In this method, we first convert the populationInMillions to just population by multiplying it by 1,000,000. Then we filter the countries by those whose population is less than the provided population.
+
+If populationInMillions is not provided (i.e., it is null), we just return the original countries without applying any filter.
