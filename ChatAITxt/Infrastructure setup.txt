@@ -1,0 +1,141 @@
+🏃 Workflow Dispatch Action v1.2.1
+🔎 Found workflow, id: 62120718, name: SonarCloud, path: .github/workflows/build-and-analyze.yml
+🚀 Calling GitHub API to dispatch workflow...
+Error: Workflow does not have 'workflow_dispatch' trigger
+
+name: Build and Tests
+
+on:
+  workflow_run:
+    workflows: ["SonarCloud"]
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '6.0.x' ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        run: dotnet restore UseCaseOne/UseCaseOne.csproj
+      - name: Build
+        run:  dotnet build --configuration Release --no-restore UseCaseOne/UseCaseOne.csproj
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal UseCaseOne/UseCaseOne.csproj
+
+      - name: Trigger SonarCloud analysis
+        if: ${{ success() }} # This step runs only if the build and test steps were successful
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: .github/workflows/build-and-analyze.yml # Name of the workflow file to trigger
+          token: ${{ secrets.PAT_TOKEN }}
+          ref: ${{ github.ref }}
+
+name: Build and Tests
+
+on:
+  workflow_run:
+    workflows: ["SonarCloud"]
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '6.0.x' ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        run: dotnet restore UseCaseOne/UseCaseOne.csproj
+      - name: Build
+        run:  dotnet build --configuration Release --no-restore UseCaseOne/UseCaseOne.csproj
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal UseCaseOne/UseCaseOne.csproj
+
+      - name: Trigger SonarCloud analysis
+        if: ${{ success() }} # This step runs only if the build and test steps were successful
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: .github/workflows/build-and-analyze.yml # Name of the workflow file to trigger
+          token: ${{ secrets.PAT_TOKEN }}
+          ref: ${{ github.ref }}
+ChatGPT
+It seems that you are still encountering the "Error: Workflow does not have 'workflow_dispatch' trigger" when trying to use the benc-uk/workflow-dispatch@v1 action.
+
+The issue arises because the workflow you are trying to trigger, which is specified in the workflow input, does not have a workflow_dispatch trigger defined. The workflow_dispatch trigger is required for the benc-uk/workflow-dispatch action to work.
+
+To resolve this, you can either:
+
+Add the workflow_dispatch trigger to your build-and-analyze.yml workflow file. Here's an example:
+yaml
+Copy code
+name: SonarCloud
+
+on:
+  workflow_dispatch:
+
+# ... rest of your workflow steps
+By adding the workflow_dispatch trigger, you enable manual triggering of the workflow.
+
+Instead of using the benc-uk/workflow-dispatch action, directly reference the workflow you want to trigger using the workflow_run event trigger. For example:
+yaml
+Copy code
+name: Build and Tests
+
+on:
+  workflow_run:
+    workflows: ["SonarCloud"]
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# ... rest of your workflow steps
+With this configuration, the SonarCloud workflow will be triggered automatically upon the successful completion of the Build and Tests workflow.
+
+Choose the option that best suits your requirements and update your workflow configuration accordingly.
+
+
+To display the workflows for "Build and Tests" and "SonarCloud" in your README file, you can use the GitHub Actions badge and link directly to the workflow runs.
+
+Here's an example of how you can structure the section in your README file:
+
+markdown
+Copy code
+## Workflows
+
+### Build and Tests
+[![Build and Tests](https://github.com/your-username/your-repo-name/actions/workflows/build-and-tests.yml/badge.svg)](https://github.com/your-username/your-repo-name/actions/workflows/build-and-tests.yml)
+
+This workflow runs the build and tests for your project.
+
+### SonarCloud
+[![SonarCloud](https://github.com/your-username/your-repo-name/actions/workflows/build-and-analyze.yml/badge.svg)](https://github.com/your-username/your-repo-name/actions/workflows/build-and-analyze.yml)
+
+This workflow triggers the SonarCloud analysis for your project.
+
+Replace your-username and your-repo-name with your GitHub username and repository name respectively. Adjust the workflow file names and paths if necessary.
+
+By including the above section in your README file, users will be able to see the badges for each workflow and can click on them to view the workflow runs directly on GitHub.
