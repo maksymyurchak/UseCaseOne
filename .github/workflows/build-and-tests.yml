@@ -1,36 +1,36 @@
-# name: Build and Tests
+name: Build and Tests
 
-# on:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-#     types: [opened, synchronize, reopened]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         dotnet-version: [ '6.0.x' ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '6.0.x' ]
 
-#     steps:
-#       - uses: actions/checkout@v3
-#       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-#         uses: actions/setup-dotnet@v3
-#         with:
-#           dotnet-version: ${{ matrix.dotnet-version }}
-#       - name: Install dependencies
-#         run: dotnet restore UseCaseOne/UseCaseOne.csproj
-#       - name: Build
-#         run:  dotnet build --configuration Release --no-restore UseCaseOne/UseCaseOne.csproj
-#       - name: Test
-#         run: dotnet test --no-restore --verbosity normal UseCaseOne/UseCaseOne.csproj
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        run: dotnet restore UseCaseOne/UseCaseOne.csproj
+      - name: Build
+        run:  dotnet build --configuration Release --no-restore UseCaseOne/UseCaseOne.csproj
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal UseCaseOne/UseCaseOne.csproj
 
-#       - name: Trigger SonarCloud analysis
-#         if: ${{ success() }} # This step runs only if the build and test steps were successful
-#         uses: benc-uk/workflow-dispatch@v1
-#         with:
-#           workflow: .github/workflows/build-and-analyze.yml # Name of the workflow file to trigger
-#           token: ${{ secrets.PAT_TOKEN }}
-#           ref: ${{ github.ref }}
+      - name: Trigger SonarCloud analysis
+        if: ${{ success() }} # This step runs only if the build and test steps were successful
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: .github/workflows/build-and-analyze.yml # Name of the workflow file to trigger
+          token: ${{ secrets.PAT_TOKEN }}
+          ref: ${{ github.ref }}
