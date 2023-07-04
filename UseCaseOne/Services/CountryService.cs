@@ -24,7 +24,7 @@ namespace UseCaseOne.Services
 					PropertyNameCaseInsensitive = true
 				};
 				var countries = JsonSerializer.Deserialize<IEnumerable<CountryInfo>>(content, options);
-				return countries;
+				return countries ?? Enumerable.Empty<CountryInfo>();
 			}
 			else
 			{
