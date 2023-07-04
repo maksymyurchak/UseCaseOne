@@ -1,8 +1,6 @@
 name: Build and Tests
 
 on:
-  workflow_run:
-    workflows: ["SonarCloud"]
   push:
     branches:
       - main
