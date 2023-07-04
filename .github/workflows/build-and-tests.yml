@@ -27,10 +27,10 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --verbosity normal
 
-    - name: Trigger SonarCloud analysis
-      if: ${{ success() }} # This step runs only if the build and test steps were successful
-      uses: benc-uk/workflow-dispatch@v1
-      with:
-        workflow: build-analyze.yml # Name of the workflow file to trigger
-        token: ${{ secrets.GITHUB_TOKEN }}
-        ref: ${{ github.ref }}
+      - name: Trigger SonarCloud analysis
+        if: ${{ success() }} # This step runs only if the build and test steps were successful
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: build-analyze.yml # Name of the workflow file to trigger
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.ref }}   
