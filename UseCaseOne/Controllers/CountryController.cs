@@ -20,10 +20,10 @@ namespace UseCaseOne.Controllers
 		}
 
         [HttpGet]
-        public async Task<IEnumerable<CountryInfo>> Get([FromQuery] string name = null, [FromQuery] int? population = null, [FromQuery] string sort = null)
+        public async Task<IEnumerable<CountryInfo>> Get([FromQuery] string name = null, [FromQuery] int? population = null, [FromQuery] string sort = null, [FromQuery] int? take = null)
         {
             var countries = await countryService.GetAllAsync();
-			var result = countries.FilterByName(name).FilterByPopulation(population).OrderByName(sort);
+			var result = countries.FilterByName(name).FilterByPopulation(population).OrderByName(sort).TakeLimit(take);
 
 			return result;
 		}

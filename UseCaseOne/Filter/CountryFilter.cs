@@ -40,6 +40,14 @@ namespace UseCaseOne.Filter
 			}
 			return countries;
 		}
+		public static IEnumerable<CountryInfo> TakeLimit(this IEnumerable<CountryInfo> countries, int? take)
+		{
+			if (take.HasValue)
+			{
+				return countries.Take(take.Value);
+			}
+			return countries;
+		}
 	}
 
 }
