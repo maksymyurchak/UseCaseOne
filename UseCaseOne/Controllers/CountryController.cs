@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
+using UseCaseOne.Filter;
 using UseCaseOne.Interfaces;
 using UseCaseOne.Models;
 
@@ -19,10 +20,12 @@ namespace UseCaseOne.Controllers
 		}
 
         [HttpGet]
-        public async Task<IEnumerable<CountryInfo>> Get()
+        public async Task<IEnumerable<CountryInfo>> Get([FromQuery] string? nameFilter = null)
         {
-            var result = await countryService.GetAllAsync();
-            return result;
+            var countries = await countryService.GetAllAsync();
+			var result = countries.FilterByName(nameFilter);
+
+			return result;
         }
     }
 }
