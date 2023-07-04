@@ -1,6 +1,8 @@
 name: Build and Tests
 
 on:
+  workflow_run:
+    workflows: ["Build and Analyze"]
   push:
     branches:
       - main
